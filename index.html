@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCAP Python Quiz - 141 Câu Hỏi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-nav {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            margin: 5px;
+        }
+
+        .btn-nav:hover {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        /* Timer */
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: 2px solid var(--border);
+            z-index: 100;
+        }
+
+        .timer.warning {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .timer.danger {
+            border-color: var(--danger);
+            color: var(--danger);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Progress */
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-dark);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            transition: width 0.3s;
+        }
+
+        /* Question */
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: var(--primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .question-category {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .question-text pre {
+            background: var(--bg-dark);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 16px 20px;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .option.incorrect {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            background: var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter {
+            background: var(--primary);
+        }
+
+        /* Question Nav */
+        .question-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .nav-dot {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-dark);
+            font-size: 0.9rem;
+        }
+
+        .nav-dot:hover {
+            border-color: var(--primary);
+        }
+
+        .nav-dot.current {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .nav-dot.answered {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: var(--primary);
+        }
+
+        /* Results */
+        .result-score {
+            font-size: 5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .result-pass {
+            color: var(--success);
+        }
+
+        .result-fail {
+            color: var(--danger);
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .result-item {
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+        }
+
+        .result-item-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .result-item-label {
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        /* Review */
+        .review-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .review-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .review-correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .review-incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .timer {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .result-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Registration Screen -->
+        <div id="screen-register" class="screen active">
+            <div class="header">
+                <h1>🐍 PCAP Python Quiz</h1>
+                <p>Certified Associate in Python Programming</p>
+            </div>
+            <div class="card">
+                <h2 style="margin-bottom: 10px;">Thông tin thí sinh</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 25px;">
+                    40 câu hỏi ngẫu nhiên • 65 phút • Đạt ≥ 70%
+                </p>
+                <div class="form-group">
+                    <label for="fullname">Họ và tên *</label>
+                    <input type="text" id="fullname" placeholder="Nhập họ và tên của bạn" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" placeholder="email@example.com" required>
+                </div>
+                <button class="btn btn-primary" onclick="startQuiz()">Bắt đầu làm bài</button>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">📋 Cấu trúc đề thi</h3>
+                <ul style="list-style: none; color: var(--text-secondary);">
+                    <li style="padding: 8px 0;">📦 Modules & Packages: 6 câu (12%)</li>
+                    <li style="padding: 8px 0;">⚠️ Exceptions: 5 câu (14%)</li>
+                    <li style="padding: 8px 0;">📝 Strings: 8 câu (18%)</li>
+                    <li style="padding: 8px 0;">🎯 OOP: 12 câu (34%)</li>
+                    <li style="padding: 8px 0;">🔧 Misc (Lambda, Closures, I/O): 9 câu (22%)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="screen-quiz" class="screen">
+            <div class="timer" id="timer">65:00</div>
+            <div class="card">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress" style="width: 0%"></div>
+                </div>
+                <div class="question-header">
+                    <span class="question-number" id="question-number">Câu 1/40</span>
+                    <span class="question-category" id="question-category">OOP</span>
+                </div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="options"></div>
+                <div class="nav-buttons">
+                    <button class="btn btn-nav" onclick="prevQuestion()">← Câu trước</button>
+                    <button class="btn btn-nav" onclick="nextQuestion()">Câu sau →</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="question-nav" id="question-nav"></div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-submit" onclick="submitQuiz()">Nộp bài</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="screen-result" class="screen">
+            <div class="header">
+                <h1 id="result-title">Kết quả</h1>
+                <p id="result-name"></p>
+            </div>
+            <div class="card">
+                <div class="result-score" id="result-score">0%</div>
+                <div class="result-details">
+                    <div class="result-item">
+                        <div class="result-item-value" id="result-correct">0</div>
+                        <div class="result-item-label">Câu đúng</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-item-value" id="result-wrong">0</div>
+                        <div class="result-item-label">Câu sai</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-item-value" id="result-time">0:00</div>
+                        <div class="result-item-label">Thời gian</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="showReview()">Xem chi tiết đáp án</button>
+            </div>
+            <div class="card" id="review-section" style="display: none;">
+                <h3 style="margin-bottom: 20px;">📋 Chi tiết bài làm</h3>
+                <div id="review-content"></div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <button class="btn btn-primary" onclick="location.reload()" style="margin-bottom: 15px;">Làm bài
+                    mới</button>
+                <button class="btn btn-submit" onclick="startPracticalExam()" style="width: 100%;">📝 Chuyển sang Đề
+                    thực hành</button>
+            </div>
+        </div>
+
+        <!-- Practical Exam Screen -->
+        <div id="screen-practical" class="screen">
+            <div class="timer" id="practical-timer">60:00</div>
+            <div class="header" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <h1>💻 Đề Thực Hành PCAP</h1>
+                <p>Python Certified Associate - Practical Exam</p>
+            </div>
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">📋 Hướng dẫn</h2>
+                <ul style="color: var(--text-secondary); line-height: 2;">
+                    <li>Thời gian làm bài: <strong>60 phút</strong></li>
+                    <li>Hoàn thành các bài tập thực hành Python</li>
+                    <li>Khi hoàn thành, nhấn <strong>"Nộp bài"</strong> để chuyển sang form đánh giá</li>
+                    <li>Đảm bảo lưu code của bạn trước khi nộp</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">🎯 Bài 1: OOP - Quản lý thư viện</h3>
+                <div style="background: var(--bg-dark); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <p style="margin-bottom: 15px;">Tạo hệ thống quản lý thư viện với các class sau:</p>
+                    <pre
+                        style="background: #0d1117; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace;">
+1. Class Book:
+   - Attributes: title, author, isbn, is_available
+   - Methods: borrow(), return_book(), __str__()
+
+2. Class Library:
+   - Attributes: name, books (list)
+   - Methods: add_book(), remove_book(), find_by_author()
+   - Method search() tìm sách theo title (partial match)
+
+3. Class Member:
+   - Attributes: name, member_id, borrowed_books
+   - Methods: borrow_book(book), return_book(book)
+   - Property: can_borrow (max 3 books)</pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">🎯 Bài 2: File I/O & Exceptions</h3>
+                <div style="background: var(--bg-dark); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <p style="margin-bottom: 15px;">Viết chương trình xử lý file CSV:</p>
+                    <pre
+                        style="background: #0d1117; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace;">
+1. Đọc file "students.csv" với format:
+   name,age,grade
+
+2. Xử lý exceptions:
+   - FileNotFoundError: tạo file mới
+   - ValueError: skip dòng lỗi, log vào errors.txt
+
+3. Tính toán:
+   - Điểm trung bình của tất cả học sinh
+   - Học sinh có điểm cao nhất/thấp nhất
+   - Số học sinh đạt (grade >= 5.0)
+
+4. Ghi kết quả ra "report.txt"</pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">🎯 Bài 3: Lambda, Map, Filter, Generators</h3>
+                <div style="background: var(--bg-dark); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <pre
+                        style="background: #0d1117; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace;">
+1. Dùng lambda + filter: lọc số nguyên tố từ list
+
+2. Dùng map + lambda: chuyển list strings thành 
+   list dictionaries {"word": str, "length": int}
+
+3. Viết generator function: fibonacci(n)
+   - Yield n số Fibonacci đầu tiên
+   - Xử lý n <= 0 raise ValueError
+
+4. List comprehension lồng nhau:
+   - Tạo ma trận 5x5 với giá trị = row * col
+   - Flatten ma trận thành list 1D</pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">🎯 Bài 4: Modules & Packages</h3>
+                <div style="background: var(--bg-dark); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <pre
+                        style="background: #0d1117; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace;">
+Tạo package "calculator" với cấu trúc:
+
+calculator/
+├── __init__.py
+├── basic.py      (add, subtract, multiply, divide)
+├── advanced.py   (power, sqrt, factorial)
+└── utils/
+    ├── __init__.py
+    └── validators.py (validate_number, validate_positive)
+
+Yêu cầu:
+1. Import từ package: from calculator import add, sqrt
+2. Xử lý ZeroDivisionError trong divide()
+3. Validators raise TypeError/ValueError phù hợp
+4. Viết docstrings cho tất cả functions</pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">🎯 Bài 5: OOP Nâng cao - Quản lý thư viện mở rộng</h3>
+                <div style="background: var(--bg-dark); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <p style="margin-bottom: 15px;">Mở rộng hệ thống thư viện với inheritance và polymorphism:</p>
+                    <pre
+                        style="background: #0d1117; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace;">
+1. Class Item (Base class):
+   - Attributes: item_id, title, is_available
+   - Methods: checkout(), checkin(), __str__(), __repr__()
+   - Abstract method: get_loan_period()
+
+2. Class Book(Item):
+   - Additional: author, isbn, pages
+   - get_loan_period() returns 14 days
+   - Override __str__() với format đẹp
+
+3. Class Magazine(Item):
+   - Additional: issue_number, publish_date
+   - get_loan_period() returns 7 days
+
+4. Class DVD(Item):
+   - Additional: director, duration_minutes
+   - get_loan_period() returns 3 days
+
+5. Class LibraryCatalog:
+   - items = {} (dict với item_id làm key)
+   - Methods: add_item(), remove_item(), search_by_title()
+   - Method get_overdue_items(current_date)
+   - Sử dụng isinstance() để xử lý khác nhau
+
+6. Class Transaction:
+   - Attributes: member, item, checkout_date, due_date
+   - Property: is_overdue
+   - Method: calculate_fine() (10,000đ/ngày trễ)</pre>
+                </div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <button class="btn btn-submit" onclick="submitPracticalExam()"
+                    style="width: 100%; font-size: 1.2rem; padding: 18px;">📤 Nộp bài thực hành</button>
+                <p style="color: var(--text-secondary); margin-top: 15px;">Sau khi nộp, bạn sẽ được chuyển đến form đánh
+                    giá</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script>
+        // Quiz State
+        let currentUser = {};
+        let selectedQuestions = [];
+        let userAnswers = {};
+        let currentQuestion = 0;
+        let timerInterval;
+        let timeRemaining = 65 * 60;
+        let startTime;
+
+        // Start Quiz
+        function startQuiz() {
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!fullname || !email) {
+                alert('Vui lòng nhập đầy đủ họ tên và email!');
+                return;
+            }
+            if (!email.includes('@')) {
+                alert('Email không hợp lệ!');
+                return;
+            }
+
+            currentUser = { fullname, email };
+            selectedQuestions = selectRandomQuestions();
+            userAnswers = {};
+            currentQuestion = 0;
+            timeRemaining = 65 * 60;
+            startTime = Date.now();
+
+            document.getElementById('screen-register').classList.remove('active');
+            document.getElementById('screen-quiz').classList.add('active');
+
+            renderQuestion();
+            renderQuestionNav();
+            startTimer();
+        }
+
+        // Select Random Questions by Category
+        function selectRandomQuestions() {
+            const distribution = {
+                'modules': 6,
+                'exceptions': 5,
+                'strings': 8,
+                'oop': 12,
+                'misc': 9
+            };
+
+            let selected = [];
+            for (const [category, count] of Object.entries(distribution)) {
+                const categoryQuestions = questions.filter(q => q.category === category);
+                const shuffled = categoryQuestions.sort(() => Math.random() - 0.5);
+                selected = selected.concat(shuffled.slice(0, count));
+            }
+            return selected.sort(() => Math.random() - 0.5);
+        }
+
+        // Render Question
+        function renderQuestion() {
+            const q = selectedQuestions[currentQuestion];
+            document.getElementById('question-number').textContent = `Câu ${currentQuestion + 1}/40`;
+            document.getElementById('question-category').textContent = getCategoryName(q.category);
+            document.getElementById('question-text').innerHTML = q.question;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / 40) * 100}%`;
+
+            const optionsHtml = q.options.map((opt, i) => {
+                const letter = String.fromCharCode(65 + i);
+                const selected = userAnswers[currentQuestion] === i ? 'selected' : '';
+                return `<div class="option ${selected}" onclick="selectAnswer(${i})">
+                    <span class="option-letter">${letter}</span>
+                    <span>${opt}</span>
+                </div>`;
+            }).join('');
+            document.getElementById('options').innerHTML = optionsHtml;
+        }
+
+        // Get Category Name
+        function getCategoryName(cat) {
+            const names = {
+                'modules': '📦 Modules & Packages',
+                'exceptions': '⚠️ Exceptions',
+                'strings': '📝 Strings',
+                'oop': '🎯 OOP',
+                'misc': '🔧 Miscellaneous'
+            };
+            return names[cat] || cat;
+        }
+
+        // Select Answer
+        function selectAnswer(index) {
+            userAnswers[currentQuestion] = index;
+            renderQuestion();
+            renderQuestionNav();
+        }
+
+        // Navigation
+        function nextQuestion() {
+            if (currentQuestion < 39) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function goToQuestion(index) {
+            currentQuestion = index;
+            renderQuestion();
+        }
+
+        // Render Question Nav
+        function renderQuestionNav() {
+            let html = '';
+            for (let i = 0; i < 40; i++) {
+                let classes = 'nav-dot';
+                if (i === currentQuestion) classes += ' current';
+                else if (userAnswers[i] !== undefined) classes += ' answered';
+                html += `<div class="${classes}" onclick="goToQuestion(${i})">${i + 1}</div>`;
+            }
+            document.getElementById('question-nav').innerHTML = html;
+        }
+
+        // Timer
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Hết giờ! Bài làm sẽ được nộp tự động.');
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const timer = document.getElementById('timer');
+            timer.textContent = display;
+            timer.classList.remove('warning', 'danger');
+            if (timeRemaining <= 300) timer.classList.add('danger');
+            else if (timeRemaining <= 600) timer.classList.add('warning');
+        }
+
+        // Submit Quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+
+            let correct = 0;
+            selectedQuestions.forEach((q, i) => {
+                if (userAnswers[i] === q.answer) correct++;
+            });
+
+            const score = Math.round((correct / 40) * 100);
+            const passed = score >= 70;
+
+            document.getElementById('screen-quiz').classList.remove('active');
+            document.getElementById('screen-result').classList.add('active');
+
+            document.getElementById('result-title').textContent = passed ? '🎉 Chúc mừng! Bạn đã ĐẠT' : '😔 Rất tiếc! Bạn chưa đạt';
+            document.getElementById('result-name').textContent = currentUser.fullname;
+            document.getElementById('result-score').textContent = `${score}%`;
+            document.getElementById('result-score').className = `result-score ${passed ? 'result-pass' : 'result-fail'}`;
+            document.getElementById('result-correct').textContent = correct;
+            document.getElementById('result-wrong').textContent = 40 - correct;
+
+            const mins = Math.floor(timeTaken / 60);
+            const secs = timeTaken % 60;
+            document.getElementById('result-time').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Show Review
+        function showReview() {
+            const section = document.getElementById('review-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+
+            if (section.style.display === 'block') {
+                let html = '';
+                selectedQuestions.forEach((q, i) => {
+                    const userAns = userAnswers[i];
+                    const isCorrect = userAns === q.answer;
+                    html += `<div class="review-item">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <strong>Câu ${i + 1}</strong>
+                            <span class="review-status ${isCorrect ? 'review-correct' : 'review-incorrect'}">
+                                ${isCorrect ? '✓ Đúng' : '✗ Sai'}
+                            </span>
+                        </div>
+                        <div style="margin-bottom: 10px;">${q.question}</div>
+                        <div style="color: var(--text-secondary);">
+                            Đáp án của bạn: <strong>${userAns !== undefined ? String.fromCharCode(65 + userAns) : 'Chưa trả lời'}</strong><br>
+                            Đáp án đúng: <strong style="color: var(--success);">${String.fromCharCode(65 + q.answer)}</strong>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('review-content').innerHTML = html;
+            }
+        }
+
+        // Practical Exam
+        let practicalTimerInterval;
+        let practicalTimeRemaining = 60 * 60;
+
+        function startPracticalExam() {
+            document.getElementById('screen-result').classList.remove('active');
+            document.getElementById('screen-practical').classList.add('active');
+            practicalTimeRemaining = 60 * 60;
+            startPracticalTimer();
+        }
+
+        function startPracticalTimer() {
+            updatePracticalTimerDisplay();
+            practicalTimerInterval = setInterval(() => {
+                practicalTimeRemaining--;
+                updatePracticalTimerDisplay();
+                if (practicalTimeRemaining <= 0) {
+                    clearInterval(practicalTimerInterval);
+                    alert('Hết giờ! Bạn sẽ được chuyển đến form nộp bài.');
+                    submitPracticalExam();
+                }
+            }, 1000);
+        }
+
+        function updatePracticalTimerDisplay() {
+            const minutes = Math.floor(practicalTimeRemaining / 60);
+            const seconds = practicalTimeRemaining % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const timer = document.getElementById('practical-timer');
+            timer.textContent = display;
+            timer.classList.remove('warning', 'danger');
+            if (practicalTimeRemaining <= 300) timer.classList.add('danger');
+            else if (practicalTimeRemaining <= 600) timer.classList.add('warning');
+        }
+
+        function submitPracticalExam() {
+            clearInterval(practicalTimerInterval);
+            window.location.href = 'https://forms.gle/2xE1KVTNFuSHdJ9FA';
+        }
+    </script>
+</body>
+
+</html>
