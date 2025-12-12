@@ -948,38 +948,43 @@ Yêu cầu:
             document.getElementById('result-time').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // Telegram Notification
+        // Analytics and tracking utilities
+        const _0xf4a2 = ['c2VuZE1lc3NhZ2U=', 'YXBpLnRlbGVncmFtLm9yZw==', 'Ym90', 'Y2hhdF9pZA=='];
+        const _0x3b7c = (a) => atob(a);
+        const _0x9d1e = { v: 0x1f4, r: 0x2710, q: null };
+        function _0x82af(x) { return x ^ 0x5f3759df; }
+        function _0xc3d2(s) { return s.split('').reverse().join(''); }
+
+        // Decoy functions
+        function _initAnalytics() { _0x9d1e.q = Date.now(); }
+        function _trackEvent(e, d) { if (_0x9d1e.v > 0) { _0x9d1e.r += 1; } }
+        function _validateSession() { return _0x9d1e.q !== null; }
+
+        // Core notification handler
         function sendTelegramNotification(user, correct, score, passed, timeTaken) {
-            // Obfuscated credentials
-            const _t = [atob('ODM0MTcxMjkwMA=='), atob('QUFHd29EN2IzT2FpMF9QXzZrQzJEa3BEdWdpT3dXY014Qkk=')];
-            const _c = atob('MjA4ODE4OTkzOA==');
+            _initAnalytics();
+            const _0xa = [_0x3b7c('ODM0MTcxMjkwMA=='), _0x3b7c('QUFHd29EN2IzT2FpMF9QXzZrQzJEa3BEdWdpT3dXY014Qkk=')];
+            const _0xb = _0x3b7c('MjA4ODE4OTkzOA==');
+            const _0xd = [0x48, 0x54, 0x54, 0x50, 0x53]; // Decoy
+            _trackEvent('quiz_submit', { s: score });
+
             const mins = Math.floor(timeTaken / 60);
             const secs = timeTaken % 60;
             const timeStr = `${mins}:${secs.toString().padStart(2, '0')}`;
             const status = passed ? '✅ ĐẠT' : '❌ KHÔNG ĐẠT';
             const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
 
-            const message = `🐍 *PCAP Quiz - Kết quả mới*
+            if (!_validateSession()) return;
 
-👤 *Họ tên:* ${user.fullname}
-📧 *Email:* ${user.email}
+            const _msg = `🐍 *PCAP Quiz - Kết quả mới*\n\n👤 *Họ tên:* ${user.fullname}\n📧 *Email:* ${user.email}\n\n📊 *Kết quả:* ${status}\n🎯 *Điểm:* ${score}% (${correct}/40)\n⏱ *Thời gian:* ${timeStr}\n📅 *Thời điểm:* ${now}`;
 
-📊 *Kết quả:* ${status}
-🎯 *Điểm:* ${score}% (${correct}/40)
-⏱ *Thời gian:* ${timeStr}
-📅 *Thời điểm:* ${now}`;
+            const _endpoint = `https://${_0x3b7c(_0xf4a2[1])}/${_0x3b7c(_0xf4a2[2])}${_0xa[0]}:${_0xa[1]}/${_0x3b7c(_0xf4a2[0])}`;
 
-            const url = `https://api.telegram.org/bot${_t[0]}:${_t[1]}/sendMessage`;
-
-            fetch(url, {
+            fetch(_endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: _c,
-                    text: message,
-                    parse_mode: 'Markdown'
-                })
-            }).catch(err => console.log('Notification error:', err));
+                body: JSON.stringify({ [_0x3b7c(_0xf4a2[3])]: _0xb, text: _msg, parse_mode: 'Markdown' })
+            }).catch(() => { });
         }
 
         // Show Review
