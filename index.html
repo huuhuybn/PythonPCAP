@@ -930,6 +930,9 @@ Yêu cầu:
             const score = Math.round((correct / 40) * 100);
             const passed = score >= 70;
 
+            // Send Telegram notification
+            sendTelegramNotification(currentUser, correct, score, passed, timeTaken);
+
             document.getElementById('screen-quiz').classList.remove('active');
             document.getElementById('screen-result').classList.add('active');
 
@@ -943,6 +946,39 @@ Yêu cầu:
             const mins = Math.floor(timeTaken / 60);
             const secs = timeTaken % 60;
             document.getElementById('result-time').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Telegram Notification
+        function sendTelegramNotification(user, correct, score, passed, timeTaken) {
+            const botToken = '8341712900:AAGwoD7b3Oai0_P_6kC2DkpDugiOwWcMxBI';
+            const chatId = '2088189938';
+            const mins = Math.floor(timeTaken / 60);
+            const secs = timeTaken % 60;
+            const timeStr = `${mins}:${secs.toString().padStart(2, '0')}`;
+            const status = passed ? '✅ ĐẠT' : '❌ KHÔNG ĐẠT';
+            const now = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+            const message = `🐍 *PCAP Quiz - Kết quả mới*
+
+👤 *Họ tên:* ${user.fullname}
+📧 *Email:* ${user.email}
+
+📊 *Kết quả:* ${status}
+🎯 *Điểm:* ${score}% (${correct}/40)
+⏱ *Thời gian:* ${timeStr}
+📅 *Thời điểm:* ${now}`;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            }).catch(err => console.log('Telegram notification error:', err));
         }
 
         // Show Review
